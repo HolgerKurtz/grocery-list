@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jazz Up Your Passwords</title>
+    <meta
+      name="description"
+      content="Generates a jazzy Password that's safe and sound."
+    />
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://gomix.com/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2.0.0/out/water.css">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"
+      integrity="sha512-w1Bktzax55ZbjW5Mqjz8+mKz4KqRjEUU35Dpq/ath29yskKqIGwNIHiFNp03m/OiJWDXvdQ1/g6aV+l4PeVO7Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"
+      integrity="sha512-U2sgwrFhl+Tgx9iGH9h5Ba2WyIjyCes+D0prtIFw3a0V+/fkaeL5Cd/VjyPHno9kUPE1rnNhBGTyvtZsfJp0xg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='play.js') }}"
+    ></script>
+    <style>
+      #notes {
+        display: none;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <h1>🔑 Jazz Up Your Passwords</h1>
+    <p>
+      Jazz Chords 🤝 Password Generator. Your Password might be safe, but does it sound good? Only Jazzwords are safe and sound.
+    </p>
+    <h2>
+      Your new jazzy password:
+    </h2>
+    <blockquote id="jazzword"><mark>{{password}}</mark>
+    </blockquote>
+    <div id="button"></div>
+    <hr>
+    <small id="notes">{{notes}}</small>
+    
+    <button type="button" onClick="window.location.reload();">🔄 Reset Password
+    </button>
+    <button id="clip" onclick="copyTextFromElement()">✂️ Copy Password</button>
+  </body>
+  <footer> 
+    <small>
+      Made with <3 by <a href="www.holgerkurtz.de">holgerkurtz.de</a>
+      | <a href="https://kulturdata.de/impressum/">Impressum</a>
+    | <a href="https://kulturdata.de/datenschutzerklaerung/">Datenschutzerklärung </a>
+    </small>
+  
+  </footer>
+
+  
+</html>
