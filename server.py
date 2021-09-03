@@ -21,7 +21,6 @@ def homepage():
     
     pw_string_raw = "".join(pw_list)
     pw_string = pw_string_raw.strip()
-      
     return render_template('index.html', password=pw_string, notes=note_list)
   
 
