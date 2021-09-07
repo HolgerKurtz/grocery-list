@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect
 from jazzword import get_password
 # Support for gomix's 'front-end' and 'back-end' UI.
 app = Flask(__name__, static_folder='public', template_folder='views')
@@ -23,6 +23,5 @@ def homepage():
     pw_string = pw_string_raw.strip()
     return render_template('index.html', password=pw_string, notes=note_list)
   
-
 if __name__ == '__main__':
     app.run()
