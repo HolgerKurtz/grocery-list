@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # If you have any questions feel free to send me a mail (holgerkurtz.de) 
 
