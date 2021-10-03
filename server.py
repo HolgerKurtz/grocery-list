@@ -7,6 +7,7 @@ from flask import Flask, request, render_template, jsonify, redirect
 from jazzword import get_password
 # Support for gomix's 'front-end' and 'back-end' UI.
 app = Flask(__name__, static_folder='public', template_folder='views')
+
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
