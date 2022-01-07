@@ -48,9 +48,7 @@
       Jazz Chords 🤝 Password Generator. Your Password might be safe, but does
       it sound good? Only Jazzwords are safe and sound.
     </p>
-    <h2>
-      Your new jazzy password:
-    </h2>
+    <h2>Your new jazzy password:</h2>
     <blockquote id="jazzword"><mark>{{password}}</mark></blockquote>
     <div id="button"></div>
     <hr />
@@ -68,24 +66,24 @@
       ><img
         src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=308633&theme=dark"
         alt="Jazz Up Your Passwords - Create a Password that's safe and sound 🎹 | Product Hunt"
-        style="width: 250px; height: 54px;"
+        style="width: 250px; height: 54px"
         width="250"
         height="54"
     /></a>
     <br />
     <small>
       Made with love by
-      <a href="https://www.holgerkurtz.de"> holgerkurtz.de</a> <br />
-       <a href="https://www.kulturdata.de/impressum/">Impressum</a> 
+      <a href="https://www.holgerkurtz.de"> @holgerkurtz (Holger Kurtz)</a> <br />
+      <a href="https://www.kulturdata.de/impressum/">Impressum</a>
       |
       <a href="https://www.kulturdata.de/datenschutzerklaerung/">Datenschutz</a>
       <br />
-      Page Views: <span id="visits"></span>
+      <div id="visits"></div>
     </small>
   </footer>
   <script>
     function cb(response) {
-      document.getElementById("visits").innerText = response.value;
+      document.getElementById("visits").className = response.value;
     }
   </script>
   <script
