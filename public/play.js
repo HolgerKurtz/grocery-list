@@ -65,6 +65,8 @@ function randomChoice(arr) {
 function copyTextFromElement() {
   let element = document.getElementById("jazzword"); //select the element
   let elementText = element.textContent; //get the text content from the element
+  console.log(element);
+  console.log(elementText);
   copyText(elementText); //use the copyText function below
   alert("✅ Passwort in die Zwischenablage kopiert.");
 }
