@@ -73,27 +73,35 @@
     </style>
   </head>
 
-  <body>
+  <body style="border-style: groove">
+    
     <h1>🔑 Jazz Up Your Passwords</h1>
     <p>
       Jazz Chords 🤝 Password Generator. Your Password might be safe, but does
       it sound good? Only Jazzwords are safe and sound.
       <i>(Tip: Bookmark this site so it's just one click away.)</i>
     </p>
+    <div class="row">
+      <div>
+        
+      
     <h2>Your new jazzy password:</h2>
-    <blockquote id="jazzword" style=""><mark>{{password}}</mark> <br><a onclick="window.location.reload();">
-      <small>Retry</small>
-    </a></blockquote>
-   
+    <p id="jazzword" style="border-style: groove">
+      <mark>{{password}}</mark> <br />
+    </p>
+
     <div id="button"></div>
-    
+    <a onclick="window.location.reload();">
+      <small>Retry</small>
+    </a>
+  
     <small id="notes">{{notes}}</small>
-    
-    
+    </div>
+      
+    </div>
     <!--
     <button id="clip" onclick="copyTextFromElement()">✂️ Copy 
-Password</button>
--->
+Password</button> -->
   </body>
   <footer>
     <a
@@ -127,4 +135,13 @@ Password</button>
     async
     src="https://api.countapi.xyz/hit/jazzpassword/visits?callback=cb"
   ></script>
+  <style>
+            .row {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                grid-template-rows: 1fr;
+                grid-column-gap: 50px;
+                grid-row-gap: 50px;
+            }
+  </style>
 </html>
