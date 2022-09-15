@@ -81,15 +81,19 @@
       <i>(Tip: Bookmark this site so it's just one click away.)</i>
     </p>
     <h2>Your new jazzy password:</h2>
-    <blockquote id="jazzword"><mark>{{password}}</mark></blockquote>
+    <blockquote id="jazzword" style=""><mark>{{password}}</mark> <br><a onclick="window.location.reload();">
+      <small>Retry</small>
+    </a></blockquote>
+   
     <div id="button"></div>
-    <hr />
+    
     <small id="notes">{{notes}}</small>
-
-    <button type="button" onclick="window.location.reload();">
-      🔄 Reset Password
-    </button>
-    <button id="clip" onclick="copyTextFromElement()">✂️ Copy Password</button>
+    
+    
+    <!--
+    <button id="clip" onclick="copyTextFromElement()">✂️ Copy 
+Password</button>
+-->
   </body>
   <footer>
     <a
