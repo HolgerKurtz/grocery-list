@@ -95,4 +95,3 @@ function checkMobile() {
   return false
 }
 }
-
