@@ -17,46 +17,10 @@
           {{ form.name.label }} {{ form.name(class="form-control") }}
         </div>
         <div class="form-group">
-          {{ form.ingredients.label }}
-          <div id="ingredients-list">
-            {% for ingredient_field in form.ingredients %}
-            <div class="form-group ingredient">
-              {{ ingredient_field(class="form-control") }}
-              <button type="button" class="btn btn-danger remove-ingredient">
-                Remove
-              </button>
-            </div>
-            {% endfor %}
-          </div>
-          <button type="button" class="btn btn-primary" id="add-ingredient">
-            Add Ingredient
-          </button>
+          {{ form.ingredients.label }} {{ form.ingredients(class="form-control") }}
         </div>
         {{ form.submit(class="btn btn-primary") }}
       </form>
     </div>
-    <script>
-      $(document).ready(function () {
-        $("#add-ingredient").click(function () {
-          var ingredientHTML =
-            '<div class="form-group ingredient">' +
-            '<input type="text" class="form-control" name="ingredients-__index__-name">' +
-            '<button type="button" class="btn btn-danger remove-ingredient">Remove</button>' +
-            "</div>";
-          var index = $("#ingredients-list .ingredient").length;
-          $("#ingredients-list").append(
-            ingredientHTML.replace("__index__", index)
-          );
-        });
-        $("#ingredients-list").on("click", ".remove-ingredient", function () {
-          $(this).parent(".ingredient").remove();
-          $("#ingredients-list .ingredient").each(function (index, element) {
-            $(element)
-              .find("input")
-              .attr("name", "ingredients-" + index + "-name");
-          });
-        });
-      });
-    </script>
   </body>
 </html>

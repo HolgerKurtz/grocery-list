@@ -4,6 +4,7 @@ from forms import MenuForm, IngredientForm
 
 app = Flask(__name__)
 app.secret_key = 'hhidfh-23hih-hi234'
+app.config['WTF_CSRF_ENABLED'] = False
 
 try:
     menu_manager = MenuManager('menue.json')
@@ -49,14 +50,12 @@ def update_menu(menu_name):
         return "This menu does not exist."
     form = MenuForm()
     if form.validate_on_submit():
-        new_ingredients = [ingredient_form.data for ingredient_form in form.ingredients.entries]
+        new_ingredients = form.ingredients.data.split('\n')  # Split the ingredients by line
         menu_manager.menu_data[menu_name] = new_ingredients
         return redirect(url_for('index'))  # Redirect to the menu overview page
     elif request.method == 'GET':
         form.name.data = menu_name
-        for ingredient in menu_manager.menu_data[menu_name]:
-            form.ingredients.append_entry({'name': ingredient})
-        form.ingredients.append_entry({'name': ''})  # append an empty form
+        form.ingredients.data = '\n'.join(menu_manager.menu_data[menu_name])  # Join the ingredients with newline characters
     else:
         print(form.errors)
     return render_template('update_menu.html', form=form)
