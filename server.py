@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from menumanager import MenuManager
-from forms import MenuForm
+from forms import MenuForm, IngredientForm
 
 app = Flask(__name__)
 app.secret_key = 'hhidfh-23hih-hi234'
@@ -49,14 +49,16 @@ def update_menu(menu_name):
         return "This menu does not exist."
     form = MenuForm()
     if form.validate_on_submit():
-        new_ingredients = form.ingredients.data
+        new_ingredients = [ingredient_form for ingredient_form in form.ingredients.entries]
         menu_manager.menu_data[menu_name] = new_ingredients
-        return redirect(url_for('index'))
+        return redirect(url_for('index'))  # Redirect to the menu overview page
     elif request.method == 'GET':
         form.name.data = menu_name
-        # populate the ingredients
         for ingredient in menu_manager.menu_data[menu_name]:
-            form.ingredients.append_entry(ingredient)
+            ingredient_form = IngredientForm()
+            ingredient_form.name.data = ingredient
+            form.ingredients.append_entry(ingredient_form)
+        form.ingredients.append_entry(IngredientForm())  # append an empty form
     return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
