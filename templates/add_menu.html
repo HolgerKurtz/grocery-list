@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Add Menu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+      <a class="navbar-brand" href="/">Grocery List Builder</a>
+    </nav>
     <div class="container">
-        <h1 class="text-center my-4">Add Menu</h1>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.name.label }} {{ form.name(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.ingredients.label }}
-                {% for ingredient in form.ingredients %}
-                    {{ ingredient(class="form-control") }}
-                {% endfor %}
-            </div>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
+      <h1 class="text-center my-4">Add Menu</h1>
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.name.label }} {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group">
+        {{ form.ingredients.label }} 
+        {{ form.ingredients(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
     </div>
-</body>
+  </body>
 </html>

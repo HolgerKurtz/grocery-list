@@ -37,7 +37,7 @@ def add_menu():
     form = MenuForm()
     if form.validate_on_submit():
         new_menu = form.name.data
-        new_ingredients = form.ingredients.data
+        new_ingredients = form.ingredients.data.split("\n")  # Split the ingredients string into a list
         if new_menu in menu_manager.menu_data:
             return "This menu already exists. Please choose a different name."
         menu_manager.menu_data[new_menu] = new_ingredients
