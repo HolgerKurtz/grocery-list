@@ -49,16 +49,14 @@ def update_menu(menu_name):
         return "This menu does not exist."
     form = MenuForm()
     if form.validate_on_submit():
-        new_ingredients = [ingredient_form for ingredient_form in form.ingredients.entries]
+        new_ingredients = [ingredient_form.name.data for ingredient_form in form.ingredients.entries]
         menu_manager.menu_data[menu_name] = new_ingredients
         return redirect(url_for('index'))  # Redirect to the menu overview page
     elif request.method == 'GET':
         form.name.data = menu_name
         for ingredient in menu_manager.menu_data[menu_name]:
-            ingredient_form = IngredientForm()
-            ingredient_form.name.data = ingredient
-            form.ingredients.append_entry(ingredient_form)
-        form.ingredients.append_entry(IngredientForm())  # append an empty form
+            form.ingredients.append_entry({'name': ingredient})
+        form.ingredients.append_entry({'name': ''})  # append an empty form
     return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
