@@ -19,7 +19,7 @@
         <div class="form-group">
           {{ form.ingredients.label }}
           <div id="ingredients-list">
-            {% for ingredient_field in form.ingredients.entries %}
+            {% for ingredient_field in form.ingredients %}
             <div class="form-group ingredient">
               {{ ingredient_field(class="form-control") }}
               <button type="button" class="btn btn-danger remove-ingredient">
