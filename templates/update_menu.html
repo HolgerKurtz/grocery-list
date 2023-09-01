@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Menu</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center my-4">Update Menu</h1>
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.name.label }} {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group">
+          {% for ingredient_field in form.ingredients.entries %}
+          <div class="form-group">
+            {{ ingredient_field.label }} {{
+            ingredient_field(class="form-control") }}
+          </div>
+          {% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    </div>
+  </body>
+</html>

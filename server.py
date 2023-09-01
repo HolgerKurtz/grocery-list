@@ -42,6 +42,22 @@ def add_menu():
         menu_manager.menu_data[new_menu] = new_ingredients
         return redirect(url_for('index'))
     return render_template('add_menu.html', form=form)
+  
+@app.route('/update_menu/<menu_name>', methods=['GET', 'POST'])
+def update_menu(menu_name):
+    if menu_name not in menu_manager.menu_data:
+        return "This menu does not exist."
+    form = MenuForm()
+    if form.validate_on_submit():
+        new_ingredients = form.ingredients.data
+        menu_manager.menu_data[menu_name] = new_ingredients
+        return redirect(url_for('index'))
+    elif request.method == 'GET':
+        form.name.data = menu_name
+        # populate the ingredients
+        for ingredient in menu_manager.menu_data[menu_name]:
+            form.ingredients.append_entry(ingredient)
+    return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)

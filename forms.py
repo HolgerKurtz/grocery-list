@@ -1,8 +1,11 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FieldList
+from wtforms import FormField, StringField, SubmitField, FieldList
 from wtforms.validators import DataRequired
+from flask_wtf import FlaskForm
+
+class IngredientForm(FlaskForm):
+    name = StringField('Ingredient', validators=[DataRequired()])
 
 class MenuForm(FlaskForm):
     name = StringField('Menu Name', validators=[DataRequired()])
-    ingredients = FieldList(StringField('Ingredient', validators=[DataRequired()]), min_entries=1)
+    ingredients = FieldList(FormField(IngredientForm), min_entries=1)
     submit = SubmitField('Submit')
