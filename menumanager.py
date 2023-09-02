@@ -21,3 +21,7 @@ class MenuManager:
         self.menu_data[menu_name] = ingredients
         with open(self.file_path, 'w', encoding='utf-8') as file:
             json.dump(self.menu_data, file, ensure_ascii=False)
+    
+    def save(self):
+        with open(self.file_path, 'w') as file:
+            json.dump(self.menu_data, file, indent=4)

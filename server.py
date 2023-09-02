@@ -41,6 +41,7 @@ def add_menu():
         if new_menu in menu_manager.menu_data:
             return "This menu already exists. Please choose a different name."
         menu_manager.menu_data[new_menu] = new_ingredients
+        menu_manager.save()  # Save the updated menu data
         return redirect(url_for('index'))
     return render_template('add_menu.html', form=form)
   
@@ -52,6 +53,7 @@ def update_menu(menu_name):
     if form.validate_on_submit():
         new_ingredients = form.ingredients.data.split('\n')  # Split the ingredients by line
         menu_manager.menu_data[menu_name] = new_ingredients
+        menu_manager.save()  # Save the updated menu data
         return redirect(url_for('index'))  # Redirect to the menu overview page
     elif request.method == 'GET':
         form.name.data = menu_name

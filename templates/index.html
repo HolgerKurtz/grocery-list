@@ -72,7 +72,12 @@
                 uniqueIngredients
                   .map(function (ingredient) {
                     return (
-                      '<li class="list-group-item">' + ingredient + "</li>"
+                      '<li class="list-group-item">' +
+                      '<span class="ingredient-name">' +
+                      ingredient +
+                      "</span>" +
+                      '<button class="btn btn-danger btn-sm float-right delete-button">x</button>' +
+                      "</li>"
                     );
                   })
                   .join("")
@@ -80,6 +85,10 @@
             }
           },
         });
+      });
+
+      $("#ingredients-list").on("click", ".delete-button", function () {
+        $(this).closest("li").remove();
       });
     </script>
   </body>
