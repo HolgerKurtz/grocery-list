@@ -8,6 +8,7 @@
       rel="stylesheet"
     />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
@@ -48,48 +49,6 @@
         </div>
       </div>
     </div>
-    <script>
-      $(".menu-checkbox").change(function () {
-        var selectedMenus = $(".menu-checkbox:checked")
-          .map(function () {
-            return $(this).val();
-          })
-          .get();
-        $.ajax({
-          url: "/get_ingredients",
-          type: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({ menus: selectedMenus }),
-          success: function (response) {
-            if (response.error) {
-              alert(response.error);
-            } else {
-              // Convert array to Set to remove duplicates, then convert back to array
-              var uniqueIngredients = Array.from(new Set(response.ingredients));
-              // Sort the ingredients alphabetically
-              uniqueIngredients.sort();
-              $("#ingredients-list").html(
-                uniqueIngredients
-                  .map(function (ingredient) {
-                    return (
-                      '<li class="list-group-item">' +
-                      '<span class="ingredient-name">' +
-                      ingredient +
-                      "</span>" +
-                      '<button class="btn btn-danger btn-sm float-right delete-button">x</button>' +
-                      "</li>"
-                    );
-                  })
-                  .join("")
-              );
-            }
-          },
-        });
-      });
-
-      $("#ingredients-list").on("click", ".delete-button", function () {
-        $(this).closest("li").remove();
-      });
-    </script>
+    
   </body>
 </html>

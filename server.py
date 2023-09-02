@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from menumanager import MenuManager
 from forms import MenuForm, IngredientForm
 
+import os
+
 app = Flask(__name__)
-app.secret_key = 'hhidfh-23hih-hi234'
+app.secret_key = os.environ.get('FLASK_APP_SECRET_KEY', 'default-secret-key')
 app.config['WTF_CSRF_ENABLED'] = False
 
 try:
