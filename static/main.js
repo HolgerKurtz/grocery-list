@@ -32,7 +32,7 @@ $(document).ready(function() {
                     return (
                         '<li class="list-group-item">' +
                         '<span class="ingredient-name">' + ingredient + '</span>' +
-                        '<button class="btn btn-danger btn-sm float-right delete-button">x</button>' +
+                        '<button class="btn btn-danger btn-sm float-right delete-button">✓</button>' +
                         '</li>'
                     );
                 })
