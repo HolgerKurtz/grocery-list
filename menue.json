@@ -1,5 +1,25 @@
 {
-  "Penne Arrabiata": ["Penne", "Tomatensauce", "Petersilie", "Chilliflocken", "Knoblauch"],
-  "Spaghetti Alio Olio": ["Spaghetti", "Knoblauch", "Olivenöl"],
-  "Nudeln mit Brokkoli": ["Laktosefreie Sahne", "Brokkoli", "Knoblauch", "Gemüsebrühe", "Pinienkerne", "Zwiebeln"]
+    "Penne Arrabiata": [
+        "Penne",
+        "Tomatensauce",
+        "Petersilie",
+        "Chilliflocken",
+        "Knoblauch"
+    ],
+    "Spaghetti Alio Olio": [
+        "Spaghetti",
+        "Knoblauch",
+        "Oliven\u00f6l"
+    ],
+    "Nudeln mit Brokkoli": [
+        "Laktosefreie Sahne",
+        "Brokkoli",
+        "Knoblauch",
+        "Gem\u00fcsebr\u00fche",
+        "Pinienkerne",
+        "Zwiebeln"
+    ],
+    "Sonstiges": [
+        "Klopapier"
+    ]
 }
