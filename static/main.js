@@ -31,9 +31,7 @@ $(document).ready(function () {
         .map(function (ingredient) {
           var menus = ingredients[ingredient]
             .map(function (menu) {
-              return (
-                '<span class="badge badge-light ml-2">' + menu + "</span>"
-              );
+              return '<span class="badge badge-light ml-2">' + menu + "</span>";
             })
             .join("");
           return (
@@ -41,7 +39,10 @@ $(document).ready(function () {
             '<span class="ingredient-name">' +
             ingredient +
             (counts[ingredient] > 1 ? " " + counts[ingredient] + "x" : "") +
-            "</span>" + '<i>' + menus + '</i>' +
+            "</span>" +
+            "<i>" +
+            menus +
+            "</i>" +
             '<button class="btn btn-danger btn-sm float-right delete-button">✓</button>' +
             "</li>"
           );
@@ -51,7 +52,12 @@ $(document).ready(function () {
   }
 
   function deleteIngredient() {
-    $(this).closest("li").remove();
+    $(this)
+      .closest("li")
+      .addClass("strikethrough")
+      .fadeOut("slow", function () {
+        $(this).remove();
+      });
   }
 
   $(".menu-checkbox").change(fetchIngredients);
