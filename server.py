@@ -65,4 +65,4 @@ def update_menu(menu_name):
     return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
-    app.run(debug=False) # 
+    app.run(debug=True) # 
