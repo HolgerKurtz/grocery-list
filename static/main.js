@@ -51,16 +51,16 @@ $(document).ready(function () {
     );
   }
 
-  function deleteIngredient() {
-    $(this).closest("li").addClass("strikethrough");
-    setTimeout(() => {
-      $(this)
-        .closest("li")
-        .fadeOut("slow", function () {
-          $(this).remove();
-        });
-    }, 500); // delay removal by 1 second
-  }
+function deleteIngredient() {
+    var cart = $('#shopping-cart').offset();  // get the position of the shopping cart
+    $(this).closest("li").animate({
+        top: cart.top,
+        left: cart.left,
+        opacity: 0
+    }, 1000, function() {
+        $(this).remove();
+    });
+}
 
   $(".menu-checkbox").change(fetchIngredients);
   $("#ingredients-list").on("click", ".delete-button", deleteIngredient);

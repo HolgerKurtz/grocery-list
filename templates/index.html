@@ -33,15 +33,6 @@
 
     <!-- FOR ANIMATION -->
     <style>
-      .strikethrough {
-        color: green;
-        transform: scale(0.5);
-        transform-origin: left;  /* Add this line */
-        transition: all 1s linear;
-      }
-      .strikethrough .ingredient-name {
-        text-decoration: line-through !important;
-      }
     </style>
   </head>
   <body>
@@ -72,7 +63,8 @@
           {% endfor %}
         </div>
         <div class="col-md-6 my-5">
-          <h2>Grocery list:</h2>
+          <h2>Grocery list:<div id="shopping-cart">🛒</div> </h2>
+          
           <ul class="list-group" id="ingredients-list"></ul>
         </div>
       </div>
