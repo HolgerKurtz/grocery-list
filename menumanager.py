@@ -16,9 +16,13 @@ class MenuManager:
         for menu_name in self.menu_data.keys():
             print(menu_name)
 
+    def normalize_ingredient(self, ingredient):
+        return ingredient.strip()
+
     def get_ingredients_for_menu(self, menu_name):
         self.load_data()  # Reload the data from the file
-        return self.menu_data.get(menu_name, [])
+        ingredients = self.menu_data.get(menu_name, [])
+        return list(map(self.normalize_ingredient, ingredients))
 
     def add_menu(self, menu_name, ingredients):
         self.menu_data[menu_name] = ingredients

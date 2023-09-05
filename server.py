@@ -14,13 +14,24 @@ except FileNotFoundError as e:
     menu_manager = None
     print(e)
 
+def get_ingredient_counts(selected_menus):
+    ingredients = {}
+    ingredientCount = {}
+    for menu in selected_menus:
+        for ingredient in menu_manager.get_ingredients_for_menu(menu):
+            if ingredient in ingredients:
+                ingredients[ingredient].append(menu)
+                ingredientCount[ingredient] += 1
+            else:
+                ingredients[ingredient] = [menu]
+                ingredientCount[ingredient] = 1
+    return ingredients, ingredientCount
 
 @app.route('/', methods=['GET'])
 def index():
     if menu_manager is None:
         return "The menu file was not found. Please check the server logs for details."
     return render_template('index.html', menus=menu_manager.menu_data.keys())
-
 
 @app.route('/get_ingredients', methods=['POST'])
 def get_ingredients():
@@ -29,17 +40,7 @@ def get_ingredients():
         menu for menu in selected_menus if menu not in menu_manager.menu_data.keys()]
     if invalid_menus:
         return jsonify(error=f"Invalid menus: {', '.join(invalid_menus)}")
-    ingredients = {}
-    ingredientCount = {}
-    for menu in selected_menus:
-        for ingredient in menu_manager.get_ingredients_for_menu(menu):
-            ingredient = ingredient.strip()  # remove leading/trailing whitespace and line breaks
-            if ingredient in ingredients:
-                ingredients[ingredient].append(menu)
-                ingredientCount[ingredient] += 1
-            else:
-                ingredients[ingredient] = [menu]
-                ingredientCount[ingredient] = 1
+    ingredients, ingredientCount = get_ingredient_counts(selected_menus)
     return jsonify(ingredients=ingredients, counts=ingredientCount)
 
 @app.route('/add_menu', methods=['GET', 'POST'])
@@ -73,4 +74,4 @@ def update_menu(menu_name):
     return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
-    app.run(debug=False) # 
+    app.run(debug=False)
