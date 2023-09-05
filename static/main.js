@@ -14,7 +14,7 @@ $(document).ready(function () {
         if (response.error) {
           alert(response.error);
         } else {
-          displayIngredients(response.ingredients);
+          displayIngredients(response); // pass the entire response object
         }
       },
     });
@@ -32,7 +32,7 @@ $(document).ready(function () {
           var menus = ingredients[ingredient]
             .map(function (menu) {
               return (
-                '<span class="badge badge-secondary ml-2">' + menu + "</span>"
+                '<span class="badge badge-light ml-2">' + menu + "</span>"
               );
             })
             .join("");
@@ -41,8 +41,7 @@ $(document).ready(function () {
             '<span class="ingredient-name">' +
             ingredient +
             (counts[ingredient] > 1 ? " " + counts[ingredient] + "x" : "") +
-            "</span>" +
-            menus +
+            "</span>" + '<i>' + menus + '</i>' +
             '<button class="btn btn-danger btn-sm float-right delete-button">✓</button>' +
             "</li>"
           );
