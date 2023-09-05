@@ -20,6 +20,23 @@
         "Zwiebeln"
     ],
     "Sonstiges": [
-        "Klopapier"
+        "Klopapier\r",
+        "Toastbrot"
+    ],
+    "Sauerkrautlasagne": [
+        "Sauerkraut\r",
+        "Lasagnebl\u00e4tter\r",
+        "Gruyter\r",
+        "Laktosefreie Sahne\r",
+        "Tomaten\r",
+        "Apfelsaft\r",
+        "Trockener Wei\u00dfwein\r",
+        "Scharlotten"
+    ],
+    "Mais Zucchini Suppe": [
+        "Mais\r",
+        "Zucchini\r",
+        "Cocktail Tomaten\r",
+        "Creme Fresh"
     ]
 }
