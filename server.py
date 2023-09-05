@@ -29,10 +29,14 @@ def get_ingredients():
         menu for menu in selected_menus if menu not in menu_manager.menu_data.keys()]
     if invalid_menus:
         return jsonify(error=f"Invalid menus: {', '.join(invalid_menus)}")
-    ingredients = set()
+    ingredients = {}
     for menu in selected_menus:
-        ingredients.update(menu_manager.get_ingredients_for_menu(menu))
-    return jsonify(ingredients=list(ingredients))
+        for ingredient in menu_manager.get_ingredients_for_menu(menu):
+            if ingredient in ingredients:
+                ingredients[ingredient].append(menu)
+            else:
+                ingredients[ingredient] = [menu]
+    return jsonify(ingredients=ingredients)
 
 @app.route('/add_menu', methods=['GET', 'POST'])
 def add_menu():

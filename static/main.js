@@ -21,15 +21,24 @@ $(document).ready(function () {
   }
 
   function displayIngredients(ingredients) {
-    // Sort the ingredients alphabetically
-    ingredients.sort();
+    var ingredientCount = {};
+    ingredients.forEach(function (i) {
+      ingredientCount[i] = (ingredientCount[i] || 0) + 1;
+    });
+
+    var uniqueIngredients = Object.keys(ingredientCount);
+    uniqueIngredients.sort();
+
     $("#ingredients-list").html(
-      ingredients
+      uniqueIngredients
         .map(function (ingredient) {
           return (
             '<li class="list-group-item">' +
             '<span class="ingredient-name">' +
             ingredient +
+            (ingredientCount[ingredient] > 1
+              ? " " + ingredientCount[ingredient] + "x"
+              : "") +
             "</span>" +
             '<button class="btn btn-danger btn-sm float-right delete-button">✓</button>' +
             "</li>"
