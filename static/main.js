@@ -53,9 +53,11 @@ $(document).ready(function () {
 
 function deleteIngredient() {
     var cart = $('#shopping-cart').offset();  // get the position of the shopping cart
-    $(this).closest("li").animate({
-        top: cart.top,
-        left: cart.left,
+    var item = $(this).closest("li");
+    var itemOffset = item.offset();  // get the current position of the item
+    item.animate({
+        top: (cart.top - itemOffset.top) + "px",  // calculate the relative position
+        left: (cart.left - itemOffset.left) + "px",  // calculate the relative position
         opacity: 0
     }, 1000, function() {
         $(this).remove();

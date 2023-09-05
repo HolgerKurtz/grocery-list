@@ -32,7 +32,11 @@
     <!-- FAVICONS END-->
 
     <!-- FOR ANIMATION -->
+
     <style>
+      #ingredients-list li {
+        position: relative; /* Add this line */
+      }
     </style>
   </head>
   <body>
@@ -63,8 +67,11 @@
           {% endfor %}
         </div>
         <div class="col-md-6 my-5">
-          <h2>Grocery list:<div id="shopping-cart">🛒</div> </h2>
-          
+          <h2>
+            Grocery list:
+            <div id="shopping-cart">🛒</div>
+          </h2>
+
           <ul class="list-group" id="ingredients-list"></ul>
         </div>
       </div>
