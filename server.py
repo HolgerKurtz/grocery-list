@@ -30,13 +30,17 @@ def get_ingredients():
     if invalid_menus:
         return jsonify(error=f"Invalid menus: {', '.join(invalid_menus)}")
     ingredients = {}
+    ingredientCount = {}
     for menu in selected_menus:
         for ingredient in menu_manager.get_ingredients_for_menu(menu):
+            ingredient = ingredient.strip()  # remove leading/trailing whitespace and line breaks
             if ingredient in ingredients:
                 ingredients[ingredient].append(menu)
+                ingredientCount[ingredient] += 1
             else:
                 ingredients[ingredient] = [menu]
-    return jsonify(ingredients=ingredients)
+                ingredientCount[ingredient] = 1
+    return jsonify(ingredients=ingredients, counts=ingredientCount)
 
 @app.route('/add_menu', methods=['GET', 'POST'])
 def add_menu():
