@@ -32,10 +32,28 @@
     <!-- FAVICONS END-->
 
     <!-- FOR ANIMATION -->
-
     <style>
-      #ingredients-list li {
-        position: relative; /* Add this line */
+      @keyframes wiggle {
+        0% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(-5deg);
+        }
+        50% {
+          transform: rotate(0deg);
+        }
+        75% {
+          transform: rotate(5deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+
+      .wiggle {
+        animation: wiggle 0.2s linear 4;
+        background-color: green !important;
       }
     </style>
   </head>
@@ -67,9 +85,7 @@
           {% endfor %}
         </div>
         <div class="col-md-6 my-5">
-          <h2 id="shopping-cart">
-            🛒 Grocery list: 
-          </h2>
+          <h2 id="shopping-cart">🛒 Grocery list:</h2>
 
           <ul class="list-group" id="ingredients-list"></ul>
         </div>
