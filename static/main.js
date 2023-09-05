@@ -50,17 +50,22 @@ $(document).ready(function () {
         .join("")
     );
   }
-
 function deleteIngredient() {
     var cart = $('#shopping-cart').offset();  // get the position of the shopping cart
     var item = $(this).closest("li");
     var itemOffset = item.offset();  // get the current position of the item
     item.animate({
-        top: (cart.top - itemOffset.top) + "px",  // calculate the relative position
-        left: (cart.left - itemOffset.left) + "px",  // calculate the relative position
-        opacity: 0
+        marginLeft: "-50%",  // move the item to the left of its current position
+        opacity: 0.5  // decrease opacity for visual effect
     }, 1000, function() {
-        $(this).remove();
+        // Once the first animation is complete, start the second animation
+        item.animate({
+            top: (cart.top - itemOffset.top) + "px",  // move the item to the shopping cart
+            left: (cart.left - itemOffset.left) + "px",  // adjust the left position relative to the shopping cart
+            opacity: 0  // fade out the item
+        }, 1000, function() {
+            $(this).remove();
+        });
     });
 }
 
