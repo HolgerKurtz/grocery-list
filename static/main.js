@@ -51,12 +51,16 @@ $(document).ready(function () {
     );
   }
 
-function deleteIngredient() {
+  function deleteIngredient() {
     $(this).closest("li").addClass("strikethrough");
     setTimeout(() => {
-        $(this).closest("li").fadeOut('slow', function() { $(this).remove(); });
-    }, 1000);  // delay removal by 1 second
-}
+      $(this)
+        .closest("li")
+        .fadeOut("slow", function () {
+          $(this).remove();
+        });
+    }, 500); // delay removal by 1 second
+  }
 
   $(".menu-checkbox").change(fetchIngredients);
   $("#ingredients-list").on("click", ".delete-button", deleteIngredient);

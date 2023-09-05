@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="robots" content="noindex">
+    {% if debug %}
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    {% endif %}
+    <meta name="robots" content="noindex" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grocery List Builder</title>
     <link
@@ -12,16 +20,27 @@
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 
     <!-- FAVICONS-->
-    <link rel="icon" type="image/x-icon" href="https://cdn.glitch.global/9af3a01f-2a62-4e31-b968-f5bc5b882057/favicon.ico?v=1693642404077">
-<link rel="apple-touch-icon" href="https://cdn.glitch.global/9af3a01f-2a62-4e31-b968-f5bc5b882057/apple-touch-icon.png?v=1693642574074">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn.glitch.global/9af3a01f-2a62-4e31-b968-f5bc5b882057/favicon.ico?v=1693642404077"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://cdn.glitch.global/9af3a01f-2a62-4e31-b968-f5bc5b882057/apple-touch-icon.png?v=1693642574074"
+    />
     <!-- FAVICONS END-->
-    
-     <!-- Add your CSS here -->
+
+    <!-- FOR ANIMATION -->
     <style>
+      .strikethrough {
+        color: green;
+        transform: scale(0.5);
+        transform-origin: left;  /* Add this line */
+        transition: all 1s linear;
+      }
       .strikethrough .ingredient-name {
-          text-decoration: line-through;
-          opacity: 0.5;
-          transition: opacity 1s linear;
+        text-decoration: line-through !important;
       }
     </style>
   </head>

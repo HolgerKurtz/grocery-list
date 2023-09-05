@@ -31,7 +31,7 @@ def get_ingredient_counts(selected_menus):
 def index():
     if menu_manager is None:
         return "The menu file was not found. Please check the server logs for details."
-    return render_template('index.html', menus=menu_manager.menu_data.keys())
+    return render_template('index.html', menus=menu_manager.menu_data.keys(), debug=app.debug)
 
 @app.route('/get_ingredients', methods=['POST'])
 def get_ingredients():
@@ -74,4 +74,4 @@ def update_menu(menu_name):
     return render_template('update_menu.html', form=form)
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
