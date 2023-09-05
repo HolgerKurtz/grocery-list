@@ -1,20 +1,35 @@
 $(document).ready(function () {
+  var allIngredients = {};
+
   function fetchIngredients() {
-    var selectedMenus = $(".menu-checkbox:checked")
-      .map(function () {
-        return $(this).val();
-      })
-      .get();
+    var menuId = $(this).val();
+    var isChecked = $(this).is(":checked");
+
     $.ajax({
       url: "/get_ingredients",
       type: "POST",
       contentType: "application/json",
-      data: JSON.stringify({ menus: selectedMenus }),
+      data: JSON.stringify({ menus: [menuId] }),
       success: function (response) {
         if (response.error) {
           alert(response.error);
         } else {
-          displayIngredients(response.ingredients);
+          // Update the ingredients list for this menu
+          if (isChecked) {
+            allIngredients[menuId] = response.ingredients;
+          } else {
+            delete allIngredients[menuId];
+          }
+
+          // Combine all the ingredients into a single list
+          var combinedIngredients = [].concat.apply(
+            [],
+            Object.values(allIngredients)
+          );
+
+          // Clear the ingredients list before displaying new ones
+          $("#ingredients-list").empty();
+          displayIngredients(combinedIngredients);
         }
       },
     });
@@ -24,10 +39,11 @@ $(document).ready(function () {
     // Create an object to count duplicates
     var ingredientsCount = {};
     ingredients.forEach(function (ingredient) {
-      if (ingredientsCount[ingredient]) {
-        ingredientsCount[ingredient]++;
+      var key = String(ingredient);
+      if (ingredientsCount[key]) {
+        ingredientsCount[key]++;
       } else {
-        ingredientsCount[ingredient] = 1;
+        ingredientsCount[key] = 1;
       }
     });
 
