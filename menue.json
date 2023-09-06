@@ -21,7 +21,7 @@
         "Zwiebeln"
     ],
     "Sonstiges": [
-        "Klopapier\r",
+        "Fettarme Milch\r",
         "Toastbrot"
     ],
     "Sauerkrautlasagne": [
@@ -47,5 +47,12 @@
         "Scharlotten\r",
         "Tortillas\r",
         "Fajita-Gew\u00fcrz"
+    ],
+    "Brotzeit": [
+        "Brot\r",
+        "K\u00e4se\r",
+        "Oliven\r",
+        "Radieschen\r",
+        "Salami"
     ]
 }
