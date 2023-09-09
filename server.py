@@ -5,7 +5,7 @@ from forms import MenuForm, IngredientForm
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_APP_SECRET_KEY', 'default-secret-key')
+app.secret_key = os.environ.get('FLASK_APP_SECRET_KEY', 'deda3-se52ret-key')
 app.config['WTF_CSRF_ENABLED'] = False
 
 try:
