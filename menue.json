@@ -22,11 +22,13 @@
     ],
     "Sonstiges": [
         "Milch\r",
-        "Basmatireis\r",
+        "Laktosefreie Milch\r",
+        "Kaffee\r",
         "Knoblauch\r",
-        "Gem\u00fcse\r",
-        "K\u00e4se\r",
-        "Toast"
+        "geiles Gem\u00fcse (Wenn da)\r",
+        "Toast\r",
+        "Klopapier\r",
+        ""
     ],
     "Sauerkrautlasagne": [
         "Sauerkraut\r",
@@ -64,5 +66,11 @@
         "Zwiebeln\r",
         "Br\u00fche\r",
         "Karotte"
+    ],
+    "K\u00fcrbisrisotto": [
+        "Feta\r",
+        "Feta\r",
+        "Bund Salbei\r",
+        "Risottoreis"
     ]
 }
