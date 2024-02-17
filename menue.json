@@ -21,11 +21,8 @@
         "Zwiebeln"
     ],
     "Sonstiges": [
-        "Nomilk\r",
-        "Sp\u00fchlmaschinentabs\r",
-        "Sesam (hell)\r",
-        "Eingelegte Paprika\r",
-        "Humus\r",
+        "Hummous\r",
+        "m\u00fcllt\u00fcten \r",
         ""
     ],
     "Sauerkrautlasagne": [
@@ -75,5 +72,19 @@
         "Scharlotten\r",
         "Scharlotten\r",
         "Scharlotten"
+    ],
+    "Lasagne": [
+        "Milch\r",
+        "Mozzarella \r",
+        "Paprika\r",
+        "Zucchini \r",
+        "Pinienkerne\r",
+        "Zwiebeln \r",
+        "Lasagnebl\u00e4tter"
+    ],
+    "Rote Beete Salat ": [
+        "Rote Beete\r",
+        "\u00c4pfel\r",
+        "Karotte"
     ]
 }
