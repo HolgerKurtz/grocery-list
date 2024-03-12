@@ -25,7 +25,8 @@
         "Oliven\u00f6l \r",
         "Kokosmilch\r",
         "Eis\r",
-        "Nutella"
+        "Nutella\r",
+        "Marmelade"
     ],
     "Sauerkrautlasagne": [
         "Sauerkraut\r",
@@ -89,5 +90,11 @@
         "\u00c4pfel\r",
         "Karotte\r",
         "Maronen"
+    ],
+    "Ofengem\u00fcse": [
+        "Zucchini\r",
+        "Paprika\r",
+        "Rosmarin\r",
+        "Karotten"
     ]
 }
