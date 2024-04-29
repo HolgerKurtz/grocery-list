@@ -21,12 +21,10 @@
         "Zwiebeln"
     ],
     "Sonstiges": [
-        "Hafermilch\r",
-        "Oliven\u00f6l \r",
-        "Kokosmilch\r",
-        "Eis\r",
-        "Nutella\r",
-        "Marmelade"
+        "Raps\u00f6l oder raffiniertes, nicht kaltgepresstes Sonnenblumen\u00f6l\r",
+        "Apfelessig\r",
+        "Banane\r",
+        "Kamillentee "
     ],
     "Sauerkrautlasagne": [
         "Sauerkraut\r",
@@ -96,5 +94,17 @@
         "Paprika\r",
         "Rosmarin\r",
         "Karotten"
+    ],
+    "Tofu Taccos": [
+        "Tofu (400g)\r",
+        "Knoblauch\r",
+        "Zwiebeln\r",
+        "1 Bund frische Petersilie\r",
+        "Veganer Joghurt\r",
+        "Vegane Mayo\r",
+        "Zitronensaft\r",
+        "Ananassaft\r",
+        "Wraps\r",
+        ""
     ]
 }
