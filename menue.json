@@ -20,13 +20,9 @@
         "Zwiebeln"
     ],
     "Sonstiges": [
-        "Oatly\r",
-        "Toast\r",
-        "Nutella\r",
-        "Humus\r",
-        "Eiweisbrot\r",
-        "Gem\u00fcse\r",
-        ""
+        "M\u00fcllbeutel\r",
+        "Schw\u00e4mme\r",
+        "Eiweisbrot K\u00f6rner"
     ],
     "Sauerkrautlasagne": [
         "Sauerkraut\r",
@@ -108,5 +104,16 @@
         "Ananassaft\r",
         "Wraps\r",
         ""
+    ],
+    "Dicke Nudeln": [
+        "Pak Choi Packung\r",
+        "Auberginen\r",
+        "Auberginen\r",
+        "Sojasauce\r",
+        "Fr\u00fchlingszwiebeln\r",
+        "Ingwer\r",
+        "Tofu\r",
+        "Erdnussmouse Alnatura pur\r",
+        "Frischer Koriander"
     ]
 }
