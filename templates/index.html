@@ -73,9 +73,9 @@
               type="checkbox"
               name="menus"
               value="{{ menu }}"
-              id="{{ menu }}"
+              id="{{ menu.replace(' ', '_') }}"
             />
-            <label class="form-check-label" for="{{ menu }}">
+            <label class="form-check-label" for="{{ menu.replace(' ', '_') }}">
               {{ menu }}
             </label>
             <a href="{{ url_for('update_menu', menu_name=menu) }}"

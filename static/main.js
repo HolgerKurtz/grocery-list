@@ -1,10 +1,26 @@
 $(document).ready(function () {
+  // Restore selected menus from localStorage
+  var savedMenus = JSON.parse(localStorage.getItem("selectedMenus")) || [];
+  console.log("Restoring menus:", savedMenus);
+  savedMenus.forEach(function (menu) {
+    $("#" + menu.replace(/ /g, "_")).prop("checked", true);
+  });
+
+  // Fetch ingredients for the restored menus
+  fetchIngredients();
+
   function fetchIngredients() {
     var selectedMenus = $(".menu-checkbox:checked")
       .map(function () {
         return $(this).val();
       })
       .get();
+
+    console.log("Selected menus:", selectedMenus); // Debugging log
+
+    // Save current selections to localStorage
+    localStorage.setItem("selectedMenus", JSON.stringify(selectedMenus));
+
     $.ajax({
       url: "/get_ingredients",
       type: "POST",
@@ -14,7 +30,7 @@ $(document).ready(function () {
         if (response.error) {
           alert(response.error);
         } else {
-          displayIngredients(response); // pass the entire response object
+          displayIngredients(response);
         }
       },
     });
@@ -51,13 +67,13 @@ $(document).ready(function () {
     );
   }
 
-function deleteIngredient() {
+  function deleteIngredient() {
     var button = $(this);
     button.addClass("wiggle");
     setTimeout(() => {
-        button.closest("li").remove();
-    }, 800);  // delay removal by 800ms to allow the animation to complete
-}
+      button.closest("li").remove();
+    }, 800); // delay removal by 800ms to allow the animation to complete
+  }
 
   $(".menu-checkbox").change(fetchIngredients);
   $("#ingredients-list").on("click", ".delete-button", deleteIngredient);

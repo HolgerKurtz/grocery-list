@@ -1,2 +1,4 @@
 .glitch-assets
 env/
+.env
+__pycache__/
