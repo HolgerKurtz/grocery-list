@@ -97,7 +97,16 @@
           <button id="generate-link-button" class="btn btn-secondary mb-3">
             Generate Shareable Link
           </button>
-          <ul class="list-group" id="ingredients-list"></ul>
+          <ul class="list-group" id="ingredients-list">
+            {% for ingredient in selected_ingredients %}
+            <li class="list-group-item">
+              <span class="ingredient-name">{{ ingredient }}</span>
+              <button class="btn btn-danger btn-sm float-right delete-button">
+                ✓
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>

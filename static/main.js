@@ -6,8 +6,11 @@ $(document).ready(function () {
     $("#" + menu.replace(/ /g, "_")).prop("checked", true);
   });
 
-  // Fetch ingredients for the restored menus
-  fetchIngredients();
+  // Initialize current ingredients from server-rendered data
+  var currentIngredients = [];
+  $("#ingredients-list .ingredient-name").each(function () {
+    currentIngredients.push($(this).text().trim());
+  });
 
   function fetchIngredients() {
     var selectedMenus = $(".menu-checkbox:checked")
@@ -42,6 +45,8 @@ $(document).ready(function () {
     var uniqueIngredients = Object.keys(ingredients);
     uniqueIngredients.sort();
 
+    currentIngredients = uniqueIngredients; // Update current ingredients
+
     $("#ingredients-list").html(
       uniqueIngredients
         .map(function (ingredient) {
@@ -71,6 +76,14 @@ $(document).ready(function () {
     var button = $(this);
     button.addClass("wiggle");
     setTimeout(() => {
+      var ingredientName = button
+        .closest("li")
+        .find(".ingredient-name")
+        .text()
+        .trim();
+      currentIngredients = currentIngredients.filter(
+        (ingredient) => ingredient !== ingredientName
+      );
       button.closest("li").remove();
     }, 800); // delay removal by 800ms to allow the animation to complete
   }
@@ -78,7 +91,6 @@ $(document).ready(function () {
   $(".menu-checkbox").change(fetchIngredients);
   $("#ingredients-list").on("click", ".delete-button", deleteIngredient);
 
-  // Add this function to your existing JavaScript
   function generateShareableLink() {
     var selectedMenus = $(".menu-checkbox:checked")
       .map(function () {
@@ -88,10 +100,13 @@ $(document).ready(function () {
 
     var baseUrl = window.location.origin + window.location.pathname;
     var shareableUrl =
-      baseUrl + "?menus=" + encodeURIComponent(selectedMenus.join(","));
+      baseUrl +
+      "?menus=" +
+      encodeURIComponent(selectedMenus.join(",")) +
+      "&ingredients=" +
+      encodeURIComponent(currentIngredients.join(","));
     prompt("Copy this link to share your grocery list:", shareableUrl);
   }
 
-  // Add this line to bind the function to a button click
   $("#generate-link-button").click(generateShareableLink);
 });

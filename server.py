@@ -35,9 +35,18 @@ def index():
     if menu_manager is None:
         return "The menu file was not found. Please check the server logs for details."
 
-    # Get menus from query parameter
+    # Get menus and ingredients from query parameters
     selected_menus = request.args.get('menus', '').split(',')
-    return render_template('index.html', menus=menu_manager.menu_data.keys(), selected_menus=selected_menus, debug=app.debug)
+    selected_ingredients = request.args.get('ingredients', '').split(',')
+
+    # Fetch all ingredients for the selected menus
+    all_ingredients, _ = get_ingredient_counts(selected_menus)
+
+    # Filter ingredients based on selected_ingredients
+    filtered_ingredients = {ingredient: all_ingredients[ingredient]
+                            for ingredient in selected_ingredients if ingredient in all_ingredients}
+
+    return render_template('index.html', menus=menu_manager.menu_data.keys(), selected_menus=selected_menus, selected_ingredients=filtered_ingredients.keys(), debug=app.debug)
 
 
 @app.route('/get_ingredients', methods=['POST'])
