@@ -64,7 +64,7 @@ $(document).ready(function () {
             "<i>" +
             menus +
             "</i>" +
-            '<button class="btn btn-danger btn-sm float-right delete-button">✓</button>' +
+            '<button class="btn btn-success float-right delete-button"><i class="fas fa-cart-plus"></i>✔</button>' +
             "</li>"
           );
         })
