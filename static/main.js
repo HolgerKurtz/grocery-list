@@ -74,18 +74,15 @@ $(document).ready(function () {
 
   function deleteIngredient() {
     var button = $(this);
-    button.addClass("wiggle");
+    var listItem = button.closest("li");
+    listItem.addClass("animate__animated animate__bounceOutLeft");
     setTimeout(() => {
-      var ingredientName = button
-        .closest("li")
-        .find(".ingredient-name")
-        .text()
-        .trim();
+      var ingredientName = listItem.find(".ingredient-name").text().trim();
       currentIngredients = currentIngredients.filter(
         (ingredient) => ingredient !== ingredientName
       );
-      button.closest("li").remove();
-    }, 800); // delay removal by 800ms to allow the animation to complete
+      listItem.remove();
+    }, 600); // delay removal by 800ms to allow the animation to complete
   }
 
   $(".menu-checkbox").change(fetchIngredients);
@@ -105,7 +102,24 @@ $(document).ready(function () {
       encodeURIComponent(selectedMenus.join(",")) +
       "&ingredients=" +
       encodeURIComponent(currentIngredients.join(","));
-    prompt("Copy this link to share your grocery list:", shareableUrl);
+
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Grocery List",
+          text: "Check out my grocery list!",
+          url: shareableUrl,
+        })
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing", error));
+    } else if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(shareableUrl)
+        .then(() => alert("Link copied to clipboard!"))
+        .catch((error) => console.log("Error copying to clipboard", error));
+    } else {
+      prompt("Copy this link to share your grocery list:", shareableUrl);
+    }
   }
 
   $("#generate-link-button").click(generateShareableLink);

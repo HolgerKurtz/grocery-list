@@ -31,35 +31,14 @@
     />
     <!-- FAVICONS END-->
 
-    <!-- FOR ANIMATION -->
-    <style>
-      @keyframes wiggle {
-        0% {
-          transform: rotate(0deg);
-        }
-        25% {
-          transform: rotate(-5deg);
-        }
-        50% {
-          transform: rotate(0deg);
-        }
-        75% {
-          transform: rotate(5deg);
-        }
-        100% {
-          transform: rotate(0deg);
-        }
-      }
-
-      .wiggle {
-        animation: wiggle 0.2s linear 4;
-        background-color: green !important;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
   </head>
   <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-      <a class="navbar-brand" href="#">Grocery List Builder</a>
+      <a class="navbar-brand" href="/">Grocery List Builder</a>
       <a class="navbar-brand" href="/add_menu">Add Menu</a>
     </nav>
     <div class="container">
@@ -94,19 +73,20 @@
         </div>
         <div class="col-md-6 my-5">
           <h2 id="shopping-cart">🛒 Grocery list:</h2>
-          <button id="generate-link-button" class="btn btn-secondary mb-3">
-            Generate Shareable Link
-          </button>
           <ul class="list-group" id="ingredients-list">
             {% for ingredient in selected_ingredients %}
             <li class="list-group-item">
               <span class="ingredient-name">{{ ingredient }}</span>
-              <button class="btn btn-danger btn-sm float-right delete-button">
+              <button class="btn btn-success btn-sm float-right delete-button">
                 ✓
               </button>
             </li>
             {% endfor %}
           </ul>
+          <br />
+          <button id="generate-link-button" class="btn btn-outline-info mb-3">
+            Generate Shareable Link
+          </button>
         </div>
       </div>
     </div>
