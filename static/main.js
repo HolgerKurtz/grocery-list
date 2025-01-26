@@ -77,4 +77,21 @@ $(document).ready(function () {
 
   $(".menu-checkbox").change(fetchIngredients);
   $("#ingredients-list").on("click", ".delete-button", deleteIngredient);
+
+  // Add this function to your existing JavaScript
+  function generateShareableLink() {
+    var selectedMenus = $(".menu-checkbox:checked")
+      .map(function () {
+        return $(this).val();
+      })
+      .get();
+
+    var baseUrl = window.location.origin + window.location.pathname;
+    var shareableUrl =
+      baseUrl + "?menus=" + encodeURIComponent(selectedMenus.join(","));
+    prompt("Copy this link to share your grocery list:", shareableUrl);
+  }
+
+  // Add this line to bind the function to a button click
+  $("#generate-link-button").click(generateShareableLink);
 });

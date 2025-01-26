@@ -74,6 +74,14 @@
               name="menus"
               value="{{ menu }}"
               id="{{ menu.replace(' ', '_') }}"
+              {%
+              if
+              menu
+              in
+              selected_menus
+              %}checked{%
+              endif
+              %}
             />
             <label class="form-check-label" for="{{ menu.replace(' ', '_') }}">
               {{ menu }}
@@ -86,7 +94,9 @@
         </div>
         <div class="col-md-6 my-5">
           <h2 id="shopping-cart">🛒 Grocery list:</h2>
-
+          <button id="generate-link-button" class="btn btn-secondary mb-3">
+            Generate Shareable Link
+          </button>
           <ul class="list-group" id="ingredients-list"></ul>
         </div>
       </div>
