@@ -13,7 +13,7 @@ try:
     menu_manager = MenuManager('menue.json')
 except FileNotFoundError as e:
     menu_manager = None
-    print(e)
+    app.logger.error(f"Menu file not found: {e}")
 
 
 def get_ingredient_counts(selected_menus):
@@ -63,13 +63,16 @@ def get_ingredients():
     return jsonify(ingredients=ingredients, counts=ingredientCount)
 
 
+def split_ingredients(ingredients_str):
+    return ingredients_str.split("\n")
+
+
 @app.route('/add_menu', methods=['GET', 'POST'])
 def add_menu():
     form = MenuForm()
     if form.validate_on_submit():
-        new_menu = form.name.data
-        new_ingredients = form.ingredients.data.split(
-            "\n")  # Split the ingredients string into a list
+        new_menu = form.name.data.strip()  # Strip whitespace from menu name
+        new_ingredients = split_ingredients(form.ingredients.data)
         if new_menu in menu_manager.menu_data:
             return "This menu already exists. Please choose a different name."
         menu_manager.menu_data[new_menu] = new_ingredients
@@ -84,8 +87,7 @@ def update_menu(menu_name):
         return "This menu does not exist."
     form = MenuForm()
     if form.validate_on_submit():
-        new_ingredients = form.ingredients.data.split(
-            '\n')  # Split the ingredients by line
+        new_ingredients = split_ingredients(form.ingredients.data)
         menu_manager.menu_data[menu_name] = new_ingredients
         menu_manager.save()  # Save the updated menu data
         return redirect(url_for('index'))  # Redirect to the menu overview page

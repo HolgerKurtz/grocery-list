@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="robots" content="noindex">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Update Menu</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   </head>
   <body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-home"></i> Grocery List Builder
+      </a>
+      <a class="navbar-brand" href="/add_menu">
+        <i class="fas fa-plus-circle"></i> Add Menu
+      </a>
+    </nav>
+
     <div class="container">
       <h1 class="text-center my-4">Update Menu</h1>
       <form method="POST">
@@ -19,7 +32,8 @@
           {{ form.name.label }} {{ form.name(class="form-control") }}
         </div>
         <div class="form-group">
-          {{ form.ingredients.label }} {{ form.ingredients(class="form-control") }}
+          {{ form.ingredients.label }} {{ form.ingredients(class="form-control")
+          }}
         </div>
         {{ form.submit(class="btn btn-primary") }}
       </form>

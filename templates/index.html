@@ -33,6 +33,10 @@
 
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
   </head>
@@ -55,7 +59,9 @@
             </div>
             <div class="card-body">
               {% for menu in menus %}
-              <div class="form-check ml-3 mb-3">
+              <div
+                class="form-check ml-3 mb-3 {% if loop.index > 5 %}hidden-menu{% endif %}"
+              >
                 <input
                   class="form-check-input menu-checkbox"
                   type="checkbox"
@@ -73,7 +79,7 @@
                   %}
                 />
                 <label
-                  class="form-check-label h5"
+                  class="form-check-label h4"
                   for="{{ menu.replace(' ', '_') }}"
                 >
                   {{ menu }}
@@ -84,6 +90,9 @@
               </div>
               {% endfor %}
             </div>
+            <button id="see-more-button" class="btn btn-link">
+              <i>Show all</i>
+            </button>
           </div>
         </div>
         <div class="col-md-6 my-5">
@@ -98,10 +107,11 @@
                   class="list-group-item d-flex justify-content-between align-items-center"
                 >
                   <span class="ingredient-name">{{ ingredient }}</span>
+                  {{ add_to_cart_button() }}
                 </li>
                 {% endfor %}
               </ul>
-
+              <br />
               <small>
                 Happy with your list? Share it with someone who will go grocery
                 shopping for you!

@@ -123,4 +123,10 @@ $(document).ready(function () {
   }
 
   $("#generate-link-button").click(generateShareableLink);
+
+  // Add this at the end of the document ready function
+  $("#see-more-button").click(function () {
+    $(".hidden-menu").show();
+    $(this).hide();
+  });
 });
