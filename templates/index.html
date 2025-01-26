@@ -107,7 +107,9 @@
                   class="list-group-item d-flex justify-content-between align-items-center"
                 >
                   <span class="ingredient-name">{{ ingredient }}</span>
-                  {{ add_to_cart_button() }}
+                  <button class="btn btn-success float-right delete-button">
+                    <i class="fas fa-cart-plus"></i>✔
+                  </button>
                 </li>
                 {% endfor %}
               </ul>
