@@ -3,8 +3,13 @@ from menumanager import MenuManager
 from forms import MenuForm
 from dotenv import load_dotenv
 import os
+import requests
+
 
 load_dotenv()
+GIPHY_API_KEY = os.environ.get('GIPHY_API_KEY')
+DEFAULT_GIF_URL = 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzhyaDM0NHRuam81Z3czZzI0cXMzN2JjOWNuamEzcm0waXZvMDZrdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/demgpwJ6rs2DS/giphy.gif'
+
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_APP_SECRET_KEY', 'deda3-se52ret-key')
 app.config['WTF_CSRF_ENABLED'] = False
@@ -98,6 +103,27 @@ def update_menu(menu_name):
     else:
         print(form.errors)
     return render_template('update_menu.html', form=form)
+
+
+@app.route('/funny-gif', methods=['GET'])
+def funny_gif():
+    # Fetch a random cooking gif from Giphy
+    try:
+        response = requests.get(
+            'https://api.giphy.com/v1/gifs/random',
+            params={
+                'api_key': GIPHY_API_KEY,
+                'tag': 'cooking',
+                'rating': 'G'
+            }
+        )
+        data = response.json()
+        gif_url = data['data']['images']['original']['url']
+    except Exception as e:
+        app.logger.error(f"Error fetching Giphy data: {e}")
+        gif_url = DEFAULT_GIF_URL
+
+    return render_template('funny_gif.html', gif_url=gif_url)
 
 
 if __name__ == '__main__':

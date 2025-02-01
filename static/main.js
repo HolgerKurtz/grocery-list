@@ -82,7 +82,15 @@ $(document).ready(function () {
         (ingredient) => ingredient !== ingredientName
       );
       listItem.remove();
-    }, 600); // delay removal by 800ms to allow the animation to complete
+
+      // Check if the ingredient list is empty and there are active checkboxes
+      if (
+        currentIngredients.length === 0 &&
+        $(".menu-checkbox:checked").length > 0
+      ) {
+        window.location.href = "/funny-gif"; // Redirect to the funny gif route
+      }
+    }, 600); // delay removal by 600ms to allow the animation to complete
   }
 
   $(".menu-checkbox").change(fetchIngredients);

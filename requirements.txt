@@ -3,3 +3,4 @@ gunicorn
 flask-wtf 
 wtforms
 python-dotenv
+requests
