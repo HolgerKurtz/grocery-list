@@ -90,7 +90,7 @@ $(document).ready(function () {
       ) {
         window.location.href = "/funny-gif"; // Redirect to the funny gif route
       }
-    }, 600); // delay removal by 600ms to allow the animation to complete
+    }, 500); // delay removal by 600ms to allow the animation to complete
   }
 
   $(".menu-checkbox").change(fetchIngredients);
