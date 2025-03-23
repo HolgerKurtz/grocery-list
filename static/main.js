@@ -94,10 +94,30 @@ $(document).ready(function () {
       // Add to checked items tracking
       state.checkedItems.add(ingredientName);
       
+      // Get the category this item belongs to
+      const categoryHeader = listItem.prevAll('.category-header').first();
+      const categoryId = categoryHeader.length > 0 ? categoryHeader.text().trim() : '';
+      
       // Remove item after animation completes
       setTimeout(function() {
         // Remove the item
         listItem.remove();
+        
+        // If we have a category header, check if it's now empty
+        if (categoryHeader.length > 0) {
+          // Check if any items are left in this category
+          const remainingItems = $("#ingredients-list li").not('.category-header').not('[data-deleting=true]').filter(function() {
+            return $(this).prevAll('.category-header').first().text().trim() === categoryId;
+          });
+          
+          // If no items remain, remove the header with animation
+          if (remainingItems.length === 0) {
+            categoryHeader.addClass("animate__animated animate__fadeOut");
+            setTimeout(() => {
+              categoryHeader.remove();
+            }, ANIMATION_DURATION);
+          }
+        }
         
         // Clean up categories
         cleanUpEmptyCategories();
@@ -205,34 +225,59 @@ $(document).ready(function () {
   
   /**
    * Update the count of remaining items and handle completion
+   * Handles both shopper and creator modes
    */
   function updateItemsCount() {
     // Count visible ingredients (not headers, not being deleted)
     const visibleItems = $("#ingredients-list li").not('.category-header').not('[data-deleting=true]').length;
     
-    // Update the counter display
-    $('#items-remaining-count').text(visibleItems);
+    // Update the counter display (only relevant in shopper mode)
+    if ($('#items-remaining-count').length > 0) {
+      $('#items-remaining-count').text(visibleItems);
+    }
     
-    console.log(`Items remaining: ${visibleItems}, Initial items in state: ${state.currentIngredients.length}`);
+    // Log current state
+    console.log(`Items remaining: ${visibleItems}, Mode: ${state.isShopperMode ? 'shopper' : 'creator'}`);
     
-    // Handle shopping list completion - show message when there are no visible items left
-    if (visibleItems === 0 && state.isShopperMode) {
-      console.log("No items remaining, showing completion message!");
-      showCompletionMessage();
-    } else {
-      $('#shopping-complete').hide();
+    // Handle shopping list completion (only in shopper mode)
+    if (state.isShopperMode) {
+      if (visibleItems === 0) {
+        console.log("No items remaining, showing completion message!");
+        showCompletionMessage();
+      } else if ($('#shopping-complete').length > 0) {
+        $('#shopping-complete').hide();
+      }
+    } else if (visibleItems === 0 && $("#ingredients-list li").length > 0) {
+      // In creator mode, if all visible items are gone but there were items,
+      // redirect to celebration page
+      console.log("All items removed in creator mode");
+      showCompletionMessage(); // This will redirect in creator mode
     }
   }
   
   /**
    * Show the completion message and set up the celebration button
+   * In shopper mode: shows the completion message
+   * In creator mode: redirects directly to funny-gif
    */
   function showCompletionMessage() {
-    console.log("All items checked, showing completion message");
+    console.log("All items checked, showing completion message or redirecting");
+    
+    // Handle differently based on mode
+    if (!state.isShopperMode) {
+      // In creator mode, redirect directly
+      console.log("In creator mode, redirecting directly to celebration");
+      window.location.href = "/funny-gif";
+      return;
+    }
+    
+    // In shopper mode, show the completion message
+    console.log("In shopper mode, showing completion message");
     
     // Make sure the completion message element exists
     if ($("#shopping-complete").length === 0) {
-      console.error("Could not find #shopping-complete element");
+      console.error("Could not find #shopping-complete element, redirecting instead");
+      window.location.href = "/funny-gif";
       return;
     }
     
@@ -256,9 +301,6 @@ $(document).ready(function () {
       console.log("Celebration button clicked, redirecting to /funny-gif");
       window.location.href = "/funny-gif";
     });
-    
-    // Log that the button is set up
-    console.log("Celebration button handler attached to:", $("#celebrateBtn").length ? "#celebrateBtn exists" : "#celebrateBtn not found");
     
     // Add a forced visibility check after a short delay
     setTimeout(function() {
@@ -388,6 +430,8 @@ $(document).ready(function () {
   /**
    * Handle deletion of an ingredient from the list
    * Animates the removal and cleans up empty categories
+   * In shopper mode: marks items as checked off
+   * In creator mode: removes items from the list
    */
   function deleteIngredient() {
     const button = $(this);
@@ -398,20 +442,22 @@ $(document).ready(function () {
       return;
     }
     
-    // Store references before animation
-    const categoryHeader = listItem.prevAll('.category-header').first();
-    const categoryId = categoryHeader.text().trim();
+    // Get the ingredient name without count suffix
+    const ingredientName = cleanIngredientName(
+      listItem.find(".ingredient-name").text()
+    );
+    
+    console.log(`Deleting ingredient: ${ingredientName} in mode: ${state.isShopperMode ? 'shopper' : 'creator'}`);
     
     // Mark the item as being deleted and animate
     listItem.addClass("animate__animated animate__bounceOutLeft");
     listItem.attr('data-deleting', 'true');
     
+    // Store references before animation (only needed for shopper mode)
+    const categoryHeader = state.isShopperMode ? listItem.prevAll('.category-header').first() : null;
+    const categoryId = state.isShopperMode ? (categoryHeader ? categoryHeader.text().trim() : '') : '';
+    
     setTimeout(() => {
-      // Get the ingredient name without count suffix
-      const ingredientName = cleanIngredientName(
-        listItem.find(".ingredient-name").text()
-      );
-      
       // Update state
       state.currentIngredients = state.currentIngredients.filter(
         (ingredient) => ingredient !== ingredientName
@@ -420,20 +466,23 @@ $(document).ready(function () {
       // Remove the item from DOM
       listItem.remove();
       
-      // Check if any items are left in this category
-      const remainingItems = $("#ingredients-list li").not('.category-header').not('[data-deleting=true]').filter(function() {
-        return $(this).prevAll('.category-header').first().text().trim() === categoryId;
-      });
-      
-      // If no items remain, remove the header with animation
-      if (remainingItems.length === 0) {
-        categoryHeader.addClass("animate__animated animate__fadeOut");
-        setTimeout(() => {
-          categoryHeader.remove();
-        }, ANIMATION_DURATION);
+      // Clean up category headers
+      if (categoryHeader && categoryHeader.length > 0) {
+        // Check if any items are left in this category
+        const remainingItems = $("#ingredients-list li").not('.category-header').not('[data-deleting=true]').filter(function() {
+          return $(this).prevAll('.category-header').first().text().trim() === categoryId;
+        });
+        
+        // If no items remain, remove the header with animation
+        if (remainingItems.length === 0) {
+          categoryHeader.addClass("animate__animated animate__fadeOut");
+          setTimeout(() => {
+            categoryHeader.remove();
+          }, ANIMATION_DURATION);
+        }
       }
       
-      // Clean up any empty categories
+      // Clean up any empty categories - do this for both modes
       cleanUpEmptyCategories();
 
       // Check if all ingredients are gone
@@ -441,9 +490,16 @@ $(document).ready(function () {
       console.log(`Remaining items after deletion: ${itemsLeft}`);
       
       if (itemsLeft === 0) {
-        // All items checked off, force show completion message
-        updateItemsCount();
-        showCompletionMessage();
+        // All items checked off, force show completion message or redirect
+        if (state.isShopperMode) {
+          // In shopper mode, update count and show completion message
+          updateItemsCount();
+          showCompletionMessage();
+        } else {
+          // In creator mode, just redirect
+          console.log("All items removed in creator mode, redirecting");
+          window.location.href = "/funny-gif";
+        }
       } else {
         // Just update the count
         updateItemsCount();
@@ -456,29 +512,48 @@ $(document).ready(function () {
    * This ensures the UI stays clean when items are removed
    */
   function cleanUpEmptyCategories() {
+    console.log("Cleaning up empty categories");
+    
+    // Process each category header
     $('.category-header').each(function() {
       const header = $(this);
+      const headerText = header.text().trim();
       let nextEl = header.next();
       
       // Case 1: No next element or next element is another header
       if (!nextEl.length || nextEl.hasClass('category-header')) {
-        header.remove();
+        console.log(`Removing empty category: ${headerText} (no items)`);
+        header.fadeOut(200, function() {
+          $(this).remove();
+        });
         return;
       }
       
       // Case 2: Check if all following items until next header are being deleted
       let hasVisibleItems = false;
       
-      while (nextEl.length && !nextEl.hasClass('category-header')) {
-        if (nextEl.is('li') && !nextEl.attr('data-deleting')) {
-          hasVisibleItems = true;
-          break;
+      // Count items in this category
+      const itemsInCategory = [];
+      let currentEl = nextEl;
+      
+      while (currentEl.length && !currentEl.hasClass('category-header')) {
+        if (currentEl.is('li')) {
+          itemsInCategory.push(currentEl);
+          if (!currentEl.attr('data-deleting') && !currentEl.hasClass('checked-off')) {
+            hasVisibleItems = true;
+          }
         }
-        nextEl = nextEl.next();
+        currentEl = currentEl.next();
       }
       
       if (!hasVisibleItems) {
-        header.remove();
+        console.log(`Removing empty category: ${headerText} (all items removed/hidden)`);
+        header.addClass("animate__animated animate__fadeOut");
+        setTimeout(() => {
+          header.remove();
+        }, 200);
+      } else {
+        console.log(`Category ${headerText} has ${itemsInCategory.length} items, keeping`);
       }
     });
   }
