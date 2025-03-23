@@ -5,3 +5,33 @@
 .form-check-input {
   transform: scale(1.5);
 }
+
+/* Supermarket categories styling */
+.category-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.category-header:first-child {
+  margin-top: 0;
+}
+
+/* Make the grocery list items more compact */
+#ingredients-list .list-group-item:not(.category-header) {
+  padding: 0.5rem 1rem;
+}
+
+/* Style for category headers */
+.list-group-item.category-header {
+  background-color: #e9ecef;
+  color: #495057;
+  font-size: 1.1em;
+  border-left: 4px solid #6c757d;
+}
+
+/* Create spacing between categories */
+.list-group-item.category-header:not(:first-child) {
+  margin-top: 0.75rem;
+}
