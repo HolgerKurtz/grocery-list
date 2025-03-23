@@ -35,3 +35,34 @@
 .list-group-item.category-header:not(:first-child) {
   margin-top: 0.75rem;
 }
+
+/* Shopper mode styles */
+.checked-off .ingredient-name {
+  text-decoration: line-through;
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+.checked-off {
+  background-color: #f8f9fa;
+  transition: background-color 0.3s ease;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+}
+
+#shopping-complete {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.badge-pill {
+  margin: 0 2px;
+}
+

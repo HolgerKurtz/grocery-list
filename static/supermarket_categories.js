@@ -61,8 +61,16 @@ const CATEGORIES = {
   }
 };
 
-// Function to categorize an ingredient
+/**
+ * Categorize an ingredient based on its name
+ * @param {string} ingredient - The ingredient name to categorize
+ * @returns {string} The category name for the ingredient
+ */
 function categorizeIngredient(ingredient) {
+  if (!ingredient) {
+    return "Sonstiges";
+  }
+  
   // Convert ingredient to lowercase for case-insensitive matching
   const ingredientLower = ingredient.toLowerCase();
   
@@ -75,9 +83,19 @@ function categorizeIngredient(ingredient) {
   
   // If no exact match, check for partial matches
   for (const [category, data] of Object.entries(CATEGORIES)) {
-    if (data.items.some(item => ingredientLower.includes(item.toLowerCase()) || 
-                              item.toLowerCase().includes(ingredientLower))) {
+    // First check if ingredient contains a category item
+    if (data.items.some(item => ingredientLower.includes(item.toLowerCase()))) {
       return category;
+    }
+  }
+  
+  // Do a less strict check (if an item contains the ingredient)
+  // But only for ingredients with >3 characters to avoid false matches
+  if (ingredientLower.length > 3) {
+    for (const [category, data] of Object.entries(CATEGORIES)) {
+      if (data.items.some(item => item.toLowerCase().includes(ingredientLower))) {
+        return category;
+      }
     }
   }
   
@@ -85,9 +103,15 @@ function categorizeIngredient(ingredient) {
   return "Sonstiges";
 }
 
-// Sort categories in supermarket order
+/**
+ * Sort categories according to supermarket layout priority
+ * @param {Array<string>} categories - Array of category names to sort
+ * @returns {Array<string>} Sorted array of category names
+ */
 function sortCategoriesByPriority(categories) {
   return categories.sort((a, b) => {
-    return (CATEGORIES[a]?.priority || 99) - (CATEGORIES[b]?.priority || 99);
+    const priorityA = CATEGORIES[a]?.priority ?? 99;
+    const priorityB = CATEGORIES[b]?.priority ?? 99;
+    return priorityA - priorityB;
   });
 }

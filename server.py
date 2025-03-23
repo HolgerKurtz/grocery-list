@@ -1,135 +1,258 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from menumanager import MenuManager
 from forms import MenuForm
-from dotenv import load_dotenv
 import os
 import requests
+import logging
+import config
+import utils
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, 
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-load_dotenv()
-GIPHY_API_KEY = os.environ.get('GIPHY_API_KEY')
-DEFAULT_GIF_URL = 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzhyaDM0NHRuam81Z3czZzI0cXMzN2JjOWNuamEzcm0waXZvMDZrdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/demgpwJ6rs2DS/giphy.gif'
-
+# Initialize Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_APP_SECRET_KEY', 'deda3-se52ret-key')
-app.config['WTF_CSRF_ENABLED'] = False
+for key, value in config.FLASK_CONFIG.items():
+    app.config[key] = value
 
+# Initialize menu manager
 try:
-    menu_manager = MenuManager('menue.json')
+    menu_manager = MenuManager(config.MENU_FILE)
+    logger.info(f"Successfully loaded menu data from {config.MENU_FILE}")
 except FileNotFoundError as e:
     menu_manager = None
-    app.logger.error(f"Menu file not found: {e}")
+    logger.error(f"Menu file not found: {e}")
+except Exception as e:
+    menu_manager = None
+    logger.error(f"Error initializing menu manager: {e}")
 
 
 def get_ingredient_counts(selected_menus):
+    """
+    Calculate ingredients and their counts from selected menus.
+    
+    Args:
+        selected_menus (list): List of menu names to process
+        
+    Returns:
+        tuple: (ingredients_dict, count_dict) where:
+            - ingredients_dict: Maps each ingredient to the menus it appears in
+            - count_dict: Maps each ingredient to its occurrence count
+    """
     ingredients = {}
-    ingredientCount = {}
+    ingredient_count = {}
+    
     for menu in selected_menus:
         for ingredient in menu_manager.get_ingredients_for_menu(menu):
             if ingredient in ingredients:
                 ingredients[ingredient].append(menu)
-                ingredientCount[ingredient] += 1
+                ingredient_count[ingredient] += 1
             else:
                 ingredients[ingredient] = [menu]
-                ingredientCount[ingredient] = 1
-    return ingredients, ingredientCount
+                ingredient_count[ingredient] = 1
+                
+    return ingredients, ingredient_count
 
 
 @app.route('/', methods=['GET'])
 def index():
+    """Main route that displays the grocery list interface."""
     if menu_manager is None:
+        logger.error("Menu manager not initialized")
         return "The menu file was not found. Please check the server logs for details."
 
-    # Get menus and ingredients from query parameters
-    selected_menus = request.args.get('menus', '').split(',')
-    selected_ingredients = request.args.get('ingredients', '').split(',')
-
-    # Fetch all ingredients for the selected menus
+    # Parse and validate query parameters using utility functions
+    selected_menus = utils.parse_comma_separated_list(request.args.get('menus', ''))
+    selected_ingredients = utils.parse_comma_separated_list(request.args.get('ingredients', ''))
+        
+    # Parse boolean parameters
+    shopper_mode = request.args.get('shopper', 'false').lower() in ('true', 't', '1', 'yes')
+    
+    # Get optional note
+    note = request.args.get('note', '')
+    
+    # Fetch ingredients data
     all_ingredients, _ = get_ingredient_counts(selected_menus)
 
     # Filter ingredients based on selected_ingredients
-    filtered_ingredients = {ingredient: all_ingredients[ingredient]
-                            for ingredient in selected_ingredients if ingredient in all_ingredients}
+    filtered_ingredients = {
+        ingredient: all_ingredients[ingredient]
+        for ingredient in selected_ingredients 
+        if ingredient in all_ingredients
+    }
 
-    return render_template('index.html', menus=menu_manager.menu_data.keys(), selected_menus=selected_menus, selected_ingredients=filtered_ingredients.keys(), debug=app.debug)
+    logger.info(f"Rendering index with {len(selected_menus)} menus and {len(filtered_ingredients)} ingredients")
+    
+    # Render the template with all necessary data
+    return render_template(
+        'index.html', 
+        menus=menu_manager.menu_data.keys(), 
+        selected_menus=selected_menus, 
+        selected_ingredients=filtered_ingredients.keys(), 
+        shopper_mode=shopper_mode,
+        note=note,
+        debug=app.debug
+    )
 
 
 @app.route('/get_ingredients', methods=['POST'])
 def get_ingredients():
+    """API endpoint to get ingredients for selected menus."""
     selected_menus = request.json.get('menus', [])
-    print("Received menus:", selected_menus)  # Debugging log
+    logger.info(f"Received request for ingredients with {len(selected_menus)} menus")
+    
+    # Validate menus
     invalid_menus = [
-        menu for menu in selected_menus if menu not in menu_manager.menu_data.keys()]
+        menu for menu in selected_menus 
+        if menu not in menu_manager.menu_data.keys()
+    ]
+    
     if invalid_menus:
-        return jsonify(error=f"Invalid menus: {', '.join(invalid_menus)}")
-    ingredients, ingredientCount = get_ingredient_counts(selected_menus)
-    print("Ingredients:", ingredients)  # Debugging log
-    print("Ingredient counts:", ingredientCount)  # Debugging log
-    return jsonify(ingredients=ingredients, counts=ingredientCount)
+        error_msg = f"Invalid menus: {', '.join(invalid_menus)}"
+        logger.warning(error_msg)
+        return jsonify(error=error_msg)
+    
+    # Get ingredients and counts
+    ingredients, ingredient_count = get_ingredient_counts(selected_menus)
+    
+    logger.info(f"Returning {len(ingredients)} ingredients")
+    return jsonify(ingredients=ingredients, counts=ingredient_count)
 
 
 def split_ingredients(ingredients_str):
-    return ingredients_str.split("\n")
+    """Split a multi-line string of ingredients into a list."""
+    if not ingredients_str:
+        return []
+    # Split by newline and strip whitespace from each ingredient
+    return [i.strip() for i in ingredients_str.split("\n") if i.strip()]  
 
 
 @app.route('/add_menu', methods=['GET', 'POST'])
 def add_menu():
+    """Add a new menu with ingredients."""
     form = MenuForm()
+    
     if form.validate_on_submit():
         new_menu = form.name.data.strip()  # Strip whitespace from menu name
         new_ingredients = split_ingredients(form.ingredients.data)
+        
+        if not new_menu:
+            logger.warning("Attempted to add menu with empty name")
+            return "Menu name cannot be empty."
+            
+        if not new_ingredients:
+            logger.warning(f"Attempted to add menu '{new_menu}' with no ingredients")
+            return "You must add at least one ingredient."
+        
         if new_menu in menu_manager.menu_data:
+            logger.warning(f"Attempted to add duplicate menu: {new_menu}")
             return "This menu already exists. Please choose a different name."
-        menu_manager.menu_data[new_menu] = new_ingredients
-        menu_manager.save()  # Save the updated menu data
+            
+        # Add the menu and save to file
+        menu_manager.add_menu(new_menu, new_ingredients)
+        logger.info(f"Added new menu '{new_menu}' with {len(new_ingredients)} ingredients")
+        
         return redirect(url_for('index'))
+        
     return render_template('add_menu.html', form=form)
 
 
 @app.route('/update_menu/<menu_name>', methods=['GET', 'POST'])
 def update_menu(menu_name):
+    """Update an existing menu's ingredients."""
     if menu_name not in menu_manager.menu_data:
+        logger.warning(f"Attempted to update non-existent menu: {menu_name}")
         return "This menu does not exist."
+        
     form = MenuForm()
+    
     if form.validate_on_submit():
         new_ingredients = split_ingredients(form.ingredients.data)
+        
+        if not new_ingredients:
+            logger.warning(f"Attempted to update menu '{menu_name}' with no ingredients")
+            return "You must add at least one ingredient."
+            
+        # Update the menu and save to file
         menu_manager.menu_data[menu_name] = new_ingredients
-        menu_manager.save()  # Save the updated menu data
-        return redirect(url_for('index'))  # Redirect to the menu overview page
+        menu_manager.save()
+        
+        logger.info(f"Updated menu '{menu_name}' with {len(new_ingredients)} ingredients")
+        return redirect(url_for('index'))
+        
     elif request.method == 'GET':
+        # Pre-populate form with existing data
         form.name.data = menu_name
-        # Join the ingredients with newline characters
         form.ingredients.data = '\n'.join(menu_manager.menu_data[menu_name])
     else:
-        print(form.errors)
+        logger.warning(f"Form validation errors: {form.errors}")
+        
     return render_template('update_menu.html', form=form)
 
 
 @app.route('/funny-gif', methods=['GET'])
 def funny_gif():
-    # Initially render with a placeholder GIF or a fast-loading static GIF
-    return render_template('funny_gif.html', gif_url=DEFAULT_GIF_URL, default_gif_url=DEFAULT_GIF_URL)
+    """Display the celebration page with a GIF when shopping is complete."""
+    logger.info("Showing celebration GIF page")
+    return render_template('funny_gif.html', 
+                          gif_url=config.DEFAULT_GIF_URL, 
+                          default_gif_url=config.DEFAULT_GIF_URL)
+
 
 @app.route('/api/get-random-gif', methods=['GET'])
 def get_random_gif():
-    # Fetch a random cooking gif from Giphy
+    """API endpoint to fetch a random cooking GIF from Giphy."""
+    if not config.GIPHY_API_KEY:
+        logger.warning("GIPHY_API_KEY is not set. Using default GIF.")
+        return jsonify({'gif_url': config.DEFAULT_GIF_URL})
+        
     try:
-        response = requests.get(
+        # Use session for connection pooling
+        session = requests.Session()
+        response = session.get(
             'https://api.giphy.com/v1/gifs/random',
             params={
-                'api_key': GIPHY_API_KEY,
+                'api_key': config.GIPHY_API_KEY,
                 'tag': 'cooking',
                 'rating': 'G'
-            }
+            },
+            timeout=config.API_TIMEOUT
         )
+        response.raise_for_status()  # Raise exception for 4xx/5xx responses
+        
         data = response.json()
-        gif_url = data['data']['images']['original']['url']
+        
+        # Get a medium-sized GIF for better performance
+        # The 'downsized' version is smaller and loads faster than 'original'
+        gif_url = data['data']['images'].get('downsized', {}).get('url')
+        
+        # Fallback to original if downsized not available
+        if not gif_url:
+            gif_url = data['data']['images']['original']['url']
+            
+        logger.info("Successfully fetched random GIF from Giphy")
+        
+    except requests.RequestException as e:
+        logger.error(f"Request error fetching Giphy data: {e}")
+        gif_url = config.DEFAULT_GIF_URL
+    except (KeyError, ValueError, TypeError) as e:
+        logger.error(f"Error parsing Giphy response: {e}")
+        gif_url = config.DEFAULT_GIF_URL
     except Exception as e:
-        app.logger.error(f"Error fetching Giphy data: {e}")
-        gif_url = DEFAULT_GIF_URL
+        logger.error(f"Unexpected error fetching Giphy data: {e}")
+        gif_url = config.DEFAULT_GIF_URL
 
-    return jsonify({'gif_url': gif_url})
+    return jsonify({
+        'gif_url': gif_url, 
+        'default_gif_url': config.DEFAULT_GIF_URL
+    })
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(
+        debug=config.DEBUG,
+        host=config.HOST,
+        port=config.PORT
+    )
