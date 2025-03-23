@@ -523,9 +523,10 @@ $(document).ready(function () {
       // Case 1: No next element or next element is another header
       if (!nextEl.length || nextEl.hasClass('category-header')) {
         console.log(`Removing empty category: ${headerText} (no items)`);
-        header.fadeOut(200, function() {
-          $(this).remove();
-        });
+        header.addClass("animate__animated animate__fadeOut");
+        setTimeout(() => {
+          header.remove();
+        }, ANIMATION_DURATION);
         return;
       }
       
@@ -551,7 +552,7 @@ $(document).ready(function () {
         header.addClass("animate__animated animate__fadeOut");
         setTimeout(() => {
           header.remove();
-        }, 200);
+        }, ANIMATION_DURATION);
       } else {
         console.log(`Category ${headerText} has ${itemsInCategory.length} items, keeping`);
       }
