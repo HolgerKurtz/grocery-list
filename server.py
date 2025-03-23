@@ -107,6 +107,11 @@ def update_menu(menu_name):
 
 @app.route('/funny-gif', methods=['GET'])
 def funny_gif():
+    # Initially render with a placeholder GIF or a fast-loading static GIF
+    return render_template('funny_gif.html', gif_url=DEFAULT_GIF_URL, default_gif_url=DEFAULT_GIF_URL)
+
+@app.route('/api/get-random-gif', methods=['GET'])
+def get_random_gif():
     # Fetch a random cooking gif from Giphy
     try:
         response = requests.get(
@@ -123,7 +128,7 @@ def funny_gif():
         app.logger.error(f"Error fetching Giphy data: {e}")
         gif_url = DEFAULT_GIF_URL
 
-    return render_template('funny_gif.html', gif_url=gif_url)
+    return jsonify({'gif_url': gif_url})
 
 
 if __name__ == '__main__':
